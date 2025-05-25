@@ -1,0 +1,81 @@
+const express = require('express')
+const app = express()
+const session = require("express-session");
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+app.use(express.urlencoded({ extended: true }));
+const { PrismaClient } = require('./generated/prisma/')
+const prisma = new PrismaClient()
+
+app.use(session({
+    secret: "cats",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.session());
+
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+        let user = await prisma.user.findFirst({
+          where: {
+            username: username
+          }
+        })
+
+      if (!user) {
+        return done(null, false, { message: "Incorrect username or password" });
+      }
+      if (user.password !== password) {
+        return done(null, false, { message: "Incorrect password or password" });
+      }
+      return done(null, user);
+    } catch(err) {
+      return done(err);
+    }
+  })
+);
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser(async (id, done) => {
+  try {
+    let user = await prisma.user.findFirst({
+      where: {
+        id: id
+      }
+    })
+    done(null, user);
+  } catch(err) {
+    done(err);
+  }
+});
+
+app.get('/', (req, res) => {
+  if (req.isAuthenticated())
+    res.send('You are authenticated')
+  else
+    res.send('You are not authenticated')
+})
+
+app.post('/log-in', passport.authenticate('local', {
+    successRedirect: "/",
+    failureRedirect: "/"
+}))
+app.get("/log-out", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.send("logged out");
+  });
+});
+
+const PORT = 3000
+app.listen(PORT, (err) => {
+    if (err)
+        console.log(err)
+    else 
+        console.log('App successfully running on port', PORT)
+})
