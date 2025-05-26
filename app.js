@@ -6,11 +6,20 @@ const LocalStrategy = require('passport-local');
 app.use(express.urlencoded({ extended: true }));
 const { PrismaClient } = require('./generated/prisma/')
 const prisma = new PrismaClient()
+const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 
 app.use(session({
     secret: "cats",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: new PrismaSessionStore(
+      prisma,
+      {
+        checkPeriod: 2 * 60 * 1000,  //ms
+        dbRecordIdIsSessionId: true,
+        dbRecordIdFunction: undefined,
+      }
+    )
 }));
 
 app.use(passport.session());
