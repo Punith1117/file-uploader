@@ -7,6 +7,10 @@ app.use(express.urlencoded({ extended: true }));
 const { PrismaClient } = require('./generated/prisma/')
 const prisma = new PrismaClient()
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
+const multer  = require('multer');
+const { isAuthenticated } = require('./middleware');
+const upload = multer({ dest: './uploads/' })
+
 
 app.use(session({
     secret: "cats",
@@ -60,6 +64,10 @@ passport.deserializeUser(async (id, done) => {
     done(err);
   }
 });
+
+app.post('/upload', isAuthenticated, upload.single('file'), (req, res) => {
+  res.send(req.file.filename + ' successfully uploaded')
+})
 
 app.get('/', (req, res) => {
   if (req.isAuthenticated())
