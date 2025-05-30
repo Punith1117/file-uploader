@@ -89,8 +89,28 @@ app.post('/delete/folder', isAuthenticated, async (req, res) => {
   res.redirect('/')
 })
 
-app.post('/upload', isAuthenticated, upload.single('file'), (req, res) => {
-  res.send(req.file.filename + ' successfully uploaded')
+app.post('/upload', isAuthenticated, upload.single('file'), async (req, res) => {
+  const file = req.file
+  const folderName = req.body.folderName
+  const dateTime = new Date()
+  const sizeInMB = Number((file.size / (1024 * 1024)).toFixed(2))
+  const folder = await prisma.folders.findFirst({
+    where: {
+      name: folderName,
+      userId: req.user.id
+    }
+  })
+  await prisma.uploads.create({
+    data: {
+      name: file.originalname,
+      downloadUrl: 'dummy',
+      uploadDateTime: dateTime,
+      sizeMb: sizeInMB,
+      folderId: folder.id
+    }
+  })
+  const result = file.originalname + ' successfully uploaded in folder ' + folderName
+  res.send(result)
 })
 
 app.get('/', (req, res) => {
