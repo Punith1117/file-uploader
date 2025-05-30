@@ -18,6 +18,14 @@ model User {
   id       Int     @id @default(autoincrement())
   username String  @unique
   password String?
+  folders Folders[]
+}
+
+model Folders {
+  id Int @id @default(autoincrement())
+  name String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 model Session {
