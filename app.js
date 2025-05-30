@@ -65,6 +65,30 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+app.post('/create/folder', isAuthenticated, async (req, res) => {
+  await prisma.folders.create({
+    data: {
+      name: req.body.folderName,
+      userId: req.user.id
+    }
+  })
+  res.redirect('/')
+})
+app.post('/delete/folder', isAuthenticated, async (req, res) => {
+  const toDelete = await prisma.folders.findFirst({
+    where: {
+      name: req.body.folderName,
+      userId: req.user.id
+    }
+  })
+  await prisma.folders.delete({
+    where: {
+      id: toDelete.id,
+    }
+  })
+  res.redirect('/')
+})
+
 app.post('/upload', isAuthenticated, upload.single('file'), (req, res) => {
   res.send(req.file.filename + ' successfully uploaded')
 })
