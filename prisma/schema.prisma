@@ -15,17 +15,28 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  username String  @unique
+  id       Int       @id @default(autoincrement())
+  username String    @unique
   password String?
-  folders Folders[]
+  folders  Folders[]
 }
 
 model Folders {
-  id Int @id @default(autoincrement())
-  name String
-  user User @relation(fields: [userId], references: [id])
-  userId Int
+  id      Int       @id @default(autoincrement())
+  name    String
+  user    User      @relation(fields: [userId], references: [id])
+  userId  Int
+  uploads Uploads[]
+}
+
+model Uploads {
+  id             Int      @id @default(autoincrement())
+  name           String
+  downloadUrl    String
+  uploadDateTime DateTime
+  sizeMb         Decimal
+  folder         Folders  @relation(fields: [folderId], references: [id])
+  folderId       Int
 }
 
 model Session {
