@@ -112,7 +112,28 @@ app.post('/upload', isAuthenticated, upload.single('file'), async (req, res) => 
   const result = file.originalname + ' successfully uploaded in folder ' + folderName
   res.send(result)
 })
-
+app.post('/delete/file', isAuthenticated, async (req, res) => {
+  const folderName = req.body.folderName
+  const fileName = req.body.fileName
+  const folder = await prisma.folders.findFirst({
+    where: {
+      name: folderName,
+      userId: req.user.id
+    }
+  })
+  const file = await prisma.uploads.findFirst({
+    where: {
+      name: fileName,
+      folderId: folder.id
+    }
+  })
+  await prisma.uploads.delete({
+    where: {
+      id: file.id
+    }
+  })
+  res.send(fileName + ' successfully deleted from folder ' + folderName)
+})
 app.get('/', (req, res) => {
   if (req.isAuthenticated())
     res.send('You are authenticated')
