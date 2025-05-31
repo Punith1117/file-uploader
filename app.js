@@ -9,8 +9,11 @@ const prisma = new PrismaClient()
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const multer  = require('multer');
 const { isAuthenticated } = require('./middleware');
-const upload = multer({ dest: './uploads/' })
-
+const dayjs = require('dayjs')
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+const { createClient } = require('@supabase/supabase-js');
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY)
 
 app.use(session({
     secret: "cats",
@@ -93,6 +96,13 @@ app.post('/upload', isAuthenticated, upload.single('file'), async (req, res) => 
   const file = req.file
   const folderName = req.body.folderName
   const dateTime = new Date()
+  const formattedDateTime = dayjs().format('YYYY-MM-DD_HH-mm-ss')
+  const filePath = req.user.id + '/' + formattedDateTime
+  await supabase.storage.from('uploads').upload(filePath, file.buffer, {
+    contentType: file.mimetype,
+    upsert: true
+  })
+  const downloadUrl = supabase.storage.from('uploads').getPublicUrl(filePath).data.publicUrl + `?download=${file.originalname}`
   const sizeInMB = Number((file.size / (1024 * 1024)).toFixed(2))
   const folder = await prisma.folders.findFirst({
     where: {
@@ -103,7 +113,7 @@ app.post('/upload', isAuthenticated, upload.single('file'), async (req, res) => 
   await prisma.uploads.create({
     data: {
       name: file.originalname,
-      downloadUrl: 'dummy',
+      downloadUrl: downloadUrl,
       uploadDateTime: dateTime,
       sizeMb: sizeInMB,
       folderId: folder.id
