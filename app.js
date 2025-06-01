@@ -137,6 +137,8 @@ app.post('/delete/file', isAuthenticated, async (req, res) => {
       folderId: folder.id
     }
   })
+  const uploadDateTime = dayjs(file.uploadDateTime).format('YYYY-MM-DD_HH-mm-ss') // Name of the file to delete in supabase
+  await supabase.storage.from('uploads').remove([`${req.user.id}/${uploadDateTime}`])
   await prisma.uploads.delete({
     where: {
       id: file.id
