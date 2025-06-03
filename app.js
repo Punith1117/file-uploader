@@ -82,8 +82,16 @@ app.post('/delete/folder', isAuthenticated, async (req, res) => {
     where: {
       name: req.body.folderName,
       userId: req.user.id
+    },
+    include: {
+      uploads: true
     }
   })
+  const uploads = toDelete.uploads
+  const uploadedFileNames = uploads.map(upload =>
+    req.user.id + '/' + dayjs(upload.uploadDateTime).format('YYYY-MM-DD_HH-mm-ss')
+  )
+  await supabase.storage.from('uploads').remove(uploadedFileNames)
   await prisma.folders.delete({
     where: {
       id: toDelete.id,
