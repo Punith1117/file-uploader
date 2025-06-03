@@ -14,6 +14,9 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage })
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY)
+const path = require("node:path");
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 app.use(session({
     secret: "cats",
