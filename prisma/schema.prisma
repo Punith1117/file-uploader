@@ -35,7 +35,7 @@ model Uploads {
   downloadUrl    String
   uploadDateTime DateTime
   sizeMb         Decimal
-  folder         Folders  @relation(fields: [folderId], references: [id])
+  folder         Folders  @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId       Int
 }
 
