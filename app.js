@@ -17,6 +17,8 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANO
 const path = require("node:path");
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+const assetsPath = path.join(__dirname, "public");
+app.use(express.static(assetsPath)); // to use static assets like css, images, svg etc..
 
 app.use(session({
     secret: "cats",
@@ -157,17 +159,22 @@ app.post('/delete/file', isAuthenticated, async (req, res) => {
   })
   res.send(fileName + ' successfully deleted from folder ' + folderName)
 })
-app.get('/', (req, res) => {
-  if (req.isAuthenticated())
-    res.send('You are authenticated')
-  else
-    res.send('You are not authenticated')
-})
 
+app.get('/', isAuthenticated, async (req, res) => {
+  const folders = await prisma.folders.findMany({
+    where: {
+      userId: req.user.id
+    }
+  })
+  res.render('folders', { folders: folders, username: req.user.username })
+})
 app.post('/log-in', passport.authenticate('local', {
     successRedirect: "/",
     failureRedirect: "/"
 }))
+app.get('/log-in', (req, res) => {
+  res.render('log-in')
+})
 app.get("/log-out", (req, res, next) => {
   req.logout((err) => {
     if (err) {

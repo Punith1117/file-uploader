@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+</head>
+<body>
+    <%- include('header') %>
+    <main>
+        <h2>Log In</h2>
+        <form action="/log-in" method="POST">
+            <label>
+                Username:
+                <input type="text" name="username">
+            </label>
+            <label>
+                Password:
+                <input type="password" name="password">
+            </label>
+            <div>
+                <a href="/">Back</a>
+                <button type="submit">Log In</button>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

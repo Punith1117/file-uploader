@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folders</title>
+</head>
+<body>
+    <%- include('header') %>
+    <h2>Folders</h2>
+    <ul>
+        <% locals.folders.forEach(folder => { %>
+            <li>
+                <form action="/folder" method="GET">
+                    <input type="hidden" name="folderName" value="<%= folder.name %>">
+                    <button type="submit">
+                        <img src="/svg/folder-svgrepo.svg" alt="folder icon">
+                        <p><%= folder.name %></p>
+                    </button>
+                </form>
+                <form action="/delete/folder" method="POST">
+                    <input type="hidden" name="folderName" value="<%= folder.name %>">
+                    <button type="submit">
+                        <img src="/svg/delete-svgrepo.svg" alt="delete icon">
+                    </button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+    <div>
+        <input type="text" placeholder="New folder name...">
+        <button>
+            <img src="/svg/folder-svgrepo.svg" alt="folder icon">
+        </button>
+    </div>
+</body>
+</html>
