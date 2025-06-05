@@ -27,11 +27,11 @@
             </li>
         <% }) %>
     </ul>
-    <div>
-        <input type="text" placeholder="New folder name...">
-        <button>
+    <form action="/create/folder" method="POST">
+        <input type="text" placeholder="New folder name..." name="folderName">
+        <button type="submit">
             <img src="/svg/folder-svgrepo.svg" alt="folder icon">
         </button>
-    </div>
+    </form>
 </body>
 </html>
