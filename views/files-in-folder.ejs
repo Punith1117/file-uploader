@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Files In Folder</title>
+</head>
+<body>
+    <%- include('header') %>
+    <main>
+        <h2><%= folderName %></h2>
+        <ul>
+            <% uploads.forEach(upload => { %>
+                <li>
+                    <div>
+                        <img src="/svg/file-document-svgrepo-com.svg" alt="file icon">
+                        <div>
+                            <h3><%= upload.name %></h3>
+                            <p>Uploaded at: <%= upload.uploadDateTime %></p>
+                            <p>Size: <%= upload.sizeMb %>mb</p>
+                        </div>
+                    </div>
+                    <a href="<%= upload.downloadUrl %>">
+                        <img src="/svg/download-svgrepo.svg" alt="download-icon">
+                    </a>
+                    <form action="/delete/file" method="POST">
+                        <input type="hidden" name="folderName" value="<%= folderName %>">
+                        <input type="hidden" name="fileName" value="<%= upload.name %>">
+                        <button type="submit">
+                            <img src="/svg/delete-svgrepo.svg" alt="delete icon">
+                        </button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="hidden" name="folderName" value="<%= folderName %>">
+            <button type="submit">
+                <img src="/svg/file-document-svgrepo-com.svg" alt="file icon">
+            </button>
+        </form>
+    </main>
+</body>
+</html>
