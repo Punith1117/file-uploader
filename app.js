@@ -159,8 +159,7 @@ app.post('/upload', isAuthenticated, upload.single('file'), async (req, res) => 
       folderId: folder.id
     }
   })
-  const result = file.originalname + ' successfully uploaded in folder ' + folderName
-  res.send(result)
+  res.redirect(`/folder/?folderName=${folderName}`)
 })
 app.post('/delete/file', isAuthenticated, async (req, res) => {
   const folderName = req.body.folderName
@@ -184,7 +183,7 @@ app.post('/delete/file', isAuthenticated, async (req, res) => {
       id: file.id
     }
   })
-  res.send(fileName + ' successfully deleted from folder ' + folderName)
+  res.redirect(`/folder/?folderName=${folderName}`)
 })
 
 app.get('/', isAuthenticated, async (req, res) => {
