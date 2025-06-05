@@ -10,6 +10,10 @@ const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const multer  = require('multer');
 const { isAuthenticated } = require('./middleware');
 const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone')
+dayjs.extend(utc)
+dayjs.extend(timezone)
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
 const { createClient } = require('@supabase/supabase-js');
@@ -92,7 +96,13 @@ app.get('/folder', isAuthenticated, async (req, res) => {
       uploads: true
     }
   })
-  const uploads = folder.uploads
+  let uploads = folder.uploads
+  uploads = uploads.map(upload => (
+    {
+      ...upload,
+      uploadDateTime: dayjs.utc(upload.uploadDateTime).tz('Asia/Kolkata').format('YYYY-MM-DD_HH-mm-ss')
+    }
+  ))
   res.render('files-in-folder', {
       username: req.user.username,
       folderName: req.query.folderName,
