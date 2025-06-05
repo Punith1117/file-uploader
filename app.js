@@ -82,6 +82,23 @@ app.post('/create/folder', isAuthenticated, async (req, res) => {
   })
   res.redirect('/')
 })
+app.get('/folder', isAuthenticated, async (req, res) => {
+  const folder = await prisma.folders.findFirst({
+    where: {
+      name: req.query.folderName,
+      userId: req.user.id
+    },
+    include: {
+      uploads: true
+    }
+  })
+  const uploads = folder.uploads
+  res.render('files-in-folder', {
+      username: req.user.username,
+      folderName: req.query.folderName,
+      uploads: uploads 
+    })
+})
 app.post('/delete/folder', isAuthenticated, async (req, res) => {
   const toDelete = await prisma.folders.findFirst({
     where: {
