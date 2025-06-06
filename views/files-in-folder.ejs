@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/header.css">
+    <link rel="stylesheet" href="/files-in-folder.css">
     <title>Files In Folder</title>
 </head>
 <body>
@@ -12,7 +14,7 @@
         <ul>
             <% uploads.forEach(upload => { %>
                 <li>
-                    <div>
+                    <div class="image-file-details-wrapper">
                         <img src="/svg/file-document-svgrepo-com.svg" alt="file icon">
                         <div>
                             <h3><%= upload.name %></h3>
@@ -20,27 +22,31 @@
                             <p>Size: <%= upload.sizeMb %>mb</p>
                         </div>
                     </div>
-                    <a href="<%= upload.downloadUrl %>">
-                        <img src="/svg/download-svgrepo.svg" alt="download-icon">
-                    </a>
-                    <form action="/delete/file" method="POST">
-                        <input type="hidden" name="folderName" value="<%= folderName %>">
-                        <input type="hidden" name="fileName" value="<%= upload.name %>">
-                        <button type="submit">
-                            <img src="/svg/delete-svgrepo.svg" alt="delete icon">
-                        </button>
-                    </form>
+                    <div class="file-utilities">
+                        <a href="<%= upload.downloadUrl %>" class="download">
+                            <img src="/svg/download-svgrepo.svg" alt="download-icon">
+                        </a>
+                        <form action="/delete/file" method="POST" class="delete-form">
+                            <input type="hidden" name="folderName" value="<%= folderName %>">
+                            <input type="hidden" name="fileName" value="<%= upload.name %>">
+                            <button type="submit">
+                                <img src="/svg/delete-svgrepo.svg" alt="delete icon">
+                            </button>
+                        </form>
+                    </div>
                 </li>
             <% }) %>
         </ul>
-        <a href="/">Back</a>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="hidden" name="folderName" value="<%= folderName %>">
-            <button type="submit">
-                <img src="/svg/file-document-svgrepo-com.svg" alt="file icon">
-            </button>
-        </form>
+        <div class="fixed">
+            <a href="/" class="back">Back</a>
+            <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form">
+                <input type="file" name="file">
+                <input type="hidden" name="folderName" value="<%= folderName %>">
+                <button type="submit">
+                    <img src="/svg/file-document-svgrepo-com.svg" alt="file icon">
+                </button>
+            </form>
+        </div>
     </main>
 </body>
 </html>
