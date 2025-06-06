@@ -206,7 +206,7 @@ app.get("/log-out", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.send("logged out");
+    res.redirect('/');
   });
 });
 
