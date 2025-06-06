@@ -8,31 +8,33 @@
 </head>
 <body>
     <%- include('header') %>
-    <h2>Folders</h2>
-    <ul>
-        <% locals.folders.forEach(folder => { %>
-            <li>
-                <form action="/folder" method="GET">
-                    <input type="hidden" name="folderName" value="<%= folder.name %>">
-                    <button type="submit">
-                        <img src="/svg/folder-svgrepo.svg" alt="folder icon">
-                        <p><%= folder.name %></p>
-                    </button>
-                </form>
-                <form action="/delete/folder" method="POST">
-                    <input type="hidden" name="folderName" value="<%= folder.name %>">
-                    <button type="submit">
-                        <img src="/svg/delete-svgrepo.svg" alt="delete icon">
-                    </button>
-                </form>
-            </li>
-        <% }) %>
-    </ul>
-    <form action="/create/folder" method="POST">
-        <input type="text" placeholder="New folder name..." name="folderName">
-        <button type="submit">
-            <img src="/svg/folder-svgrepo.svg" alt="folder icon">
-        </button>
-    </form>
+    <main>
+        <h2>Folders</h2>
+        <ul>
+            <% locals.folders.forEach(folder => { %>
+                <li>
+                    <form action="/folder" method="GET" class="folder-form">
+                        <input type="hidden" name="folderName" value="<%= folder.name %>">
+                        <button type="submit" class="folder">
+                            <img src="/svg/folder-svgrepo.svg" alt="folder icon">
+                            <p><%= folder.name %></p>
+                        </button>
+                    </form>
+                    <form action="/delete/folder" method="POST" class="delete-folder-form">
+                        <input type="hidden" name="folderName" value="<%= folder.name %>">
+                        <button type="submit" class="delete-folder">
+                            <img src="/svg/delete-svgrepo.svg" alt="delete icon">
+                        </button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+        <form action="/create/folder" method="POST" class="new-folder-form">
+            <input type="text" placeholder="New folder name..." name="folderName">
+            <button type="submit">
+                <img src="/svg/folder-svgrepo.svg" alt="folder icon">
+            </button>
+        </form>
+    </main>
 </body>
 </html>
