@@ -186,6 +186,9 @@ app.post('/delete/file', isAuthenticated, async (req, res) => {
   res.redirect(`/folder/?folderName=${folderName}`)
 })
 
+app.get('/sign-up', (req, res) => {
+  res.render('sign-up')
+})
 app.get('/', isAuthenticated, async (req, res) => {
   const folders = await prisma.folders.findMany({
     where: {

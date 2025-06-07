@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/header.css">
+    <title>Sign Up</title>
+</head>
+<body>
+    <%- include('header') %>
+    <main>
+        <h2>Sign Up</h2>
+        <form action="/sign-up" method="POST">
+            <label>
+                Username:
+                <input type="text" name="username">
+            </label>
+            <label>
+                Password:
+                <input type="password" name="password">
+            </label>
+            <div class="back-log-in-wrapper">
+                <a href="/">Back</a>
+                <button type="submit">Sign Up</button>
+            </div>
+        </form>
+    </main>
+</body>
+</html>
