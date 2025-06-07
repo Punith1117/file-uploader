@@ -127,3 +127,20 @@ ul {
         text-shadow: 1px 1px 1px black;
     }
 }
+
+@media (max-width: 500px) {
+    ul {
+        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+        width: 95vw;
+    }
+
+    .upload-form {
+        img {
+            width: 2.5rem;
+        }
+    }
+
+    .note {
+        font-family: 'Times New Roman', Times, serif;
+    }
+}

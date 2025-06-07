@@ -90,3 +90,10 @@ ul {
         width: 15%;
     }
 }
+
+@media (max-width: 500px) {
+    ul {
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+        width: 95vw;
+    }
+}
