@@ -15,7 +15,12 @@ const timezone = require('dayjs/plugin/timezone')
 dayjs.extend(utc)
 dayjs.extend(timezone)
 const storage = multer.memoryStorage()
-const upload = multer({ storage })
+const upload = multer({ 
+                storage,
+                limits: {
+                  fileSize: 1024 * 1000
+                }
+              })
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY)
 const path = require("node:path");
