@@ -52,6 +52,10 @@ ul {
         p {
             color: rgb(87, 87, 87);
         }
+
+        h3 {
+            word-break: break-all;
+        }
     }
 
     .file-utilities {
