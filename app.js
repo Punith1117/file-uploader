@@ -23,6 +23,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath)); // to use static assets like css, images, svg etc..
+const bcrypt = require('bcryptjs');
 
 app.use(session({
     secret: "cats",
@@ -52,7 +53,7 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username or password" });
       }
-      if (user.password !== password) {
+      if (!bcrypt.compare(password, user.password)) {
         return done(null, false, { message: "Incorrect password or password" });
       }
       return done(null, user);
@@ -186,6 +187,21 @@ app.post('/delete/file', isAuthenticated, async (req, res) => {
   res.redirect(`/folder/?folderName=${folderName}`)
 })
 
+app.post('/sign-up', async (req, res, next) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    await prisma.user.create({
+      data: {
+        username: req.body.username,
+        password: hashedPassword
+      }
+    })
+    res.redirect("/log-in");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+})
 app.get('/sign-up', (req, res) => {
   res.render('sign-up')
 })
