@@ -220,7 +220,7 @@ app.get('/', isAuthenticated, async (req, res) => {
 })
 app.post('/log-in', passport.authenticate('local', {
     successRedirect: "/",
-    failureRedirect: "/"
+    failureRedirect: "/log-in"
 }))
 app.get('/log-in', (req, res) => {
   res.render('log-in')
