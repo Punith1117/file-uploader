@@ -42,6 +42,7 @@
             <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form">
                 <input type="file" name="file" required>
                 <input type="hidden" name="folderName" value="<%= folderName %>">
+                <p class="note">File size must not be greater than 1MB</p>
                 <button type="submit">
                     <img src="/svg/file-document-svgrepo-com.svg" alt="file icon">
                 </button>
